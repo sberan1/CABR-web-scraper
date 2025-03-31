@@ -10,8 +10,8 @@ const getQuotes = async () => {
   // - a visible browser (`headless: false` - easier to debug because you'll see the browser in action)
   // - no default viewport (`defaultViewport: null` - website page will be in full width and height)
   const browser = await puppeteer.launch({
-    headless: true,
-    defaultViewport: null,
+    executablePath: '/usr/bin/chromium-browser',
+    args: [ '--disable-gpu', '--disable-setuid-sandbox', '--no-sandbox', '--no-zygote' ]
   });
 
   // Open a new page

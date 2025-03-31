@@ -1,28 +1,37 @@
-# Use the official Node.js 14 image as a base
-FROM node:lts
+FROM node:lts-alpine
 
-# Set the working directory in the Docker image
-WORKDIR /usr/src/app
+WORKDIR /app
 
-# Copy package.json and package-lock.json into the image
-COPY package*.json ./
+RUN apk update && apk add --no-cache nmap && \
+    echo @edge https://dl-cdn.alpinelinux.org/alpine/edge/community >> /etc/apk/repositories && \
+    echo @edge https://dl-cdn.alpinelinux.org/alpine/edge/main >> /etc/apk/repositories && \
+    apk update && \
+    apk add --no-cache \
+      chromium \
+      harfbuzz \
+      "freetype>2.8" \
+      ttf-freefont \
+      nss \
+      libstdc++ \
+      libx11 \
+      libxcomposite \
+      libxdamage \
+      libxext \
+      libxi \
+      libxtst \
+      ca-certificates \
+      cups-libs \
+      dbus \
+      eudev \
+      ttf-opensans \
+      bash
 
-# Install dependencies in the image
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
+
+COPY . /app
+
 RUN npm install
 
-# Copy the rest of the application files into the image
-COPY . .
-
-# Define build arguments for environment variables
-ARG LOGIN
-ARG PASSWORD
-
-# Set environment variables
-ENV LOGIN=$LOGIN
-ENV PASSWORD=$PASSWORD
-
-# Expose port 3134
 EXPOSE 3134
 
-# Start the application
-CMD [ "node", "index.js" ]
+CMD ["node", "index.js"]
