@@ -31,7 +31,7 @@ async function updateCalendar() {
   for (const item of data) {
     const info = parseData(item);
     const [day, month, year] = info.date.split('.');
-    const startTime = DateTime.fromISO(`${year}-${month}-${day}T${info.time}:00`).setZone("Europe/Prague");
+    const startTime = DateTime.fromFormat(`${year}-${month}-${day} ${info.time}`, 'yyyy-MM-dd HH:mm', { zone: 'Europe/Prague' });
     const endTime = startTime.plus(Duration.fromObject({ hours: 1, minutes: 30 }));
     console.log(`${info.teams}  - ${startTime} to ${endTime}`);
     calendar.createEvent({
